@@ -1,0 +1,9 @@
+{
+    "user_name": "nulhakim",
+    "email": "nul@mail.com",
+    "password": "123abc",
+    "address": [
+        { "street": "Jl Mitra Batik", "no": 20, "postal_code": 46717, "city": "Tasikmalaya" },
+        { "street": "Jl Leuwidahu", "no": 69, "postal_code": 46151, "city": "Tasikmalaya" }
+    ]
+}

@@ -1,0 +1,9 @@
+{
+    "user_name": "udin",
+    "email": "udin@mail.com",
+    "password": "123abc",
+    "address": [
+        { "street": "Jl Queen", "no": 29, "postal_code": 46717, "city": "Ciamis" },
+        { "street": "Jl Parigi", "no": 69, "postal_code": 46151, "city": "Pangandaran" }
+    ]
+}
