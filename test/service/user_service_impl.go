@@ -51,13 +51,40 @@ func (service *UserServiceImpl) Update(ctx context.Context, request web.UserUpda
 }
 
 func (service *UserServiceImpl) Delete(ctx context.Context, userId int) {
-	panic("not implemented") // TODO: Implement
+	tx, err := service.DB.Begin()
+	helper.PanicIfError(err)
+	defer helper.CommitOrRollback(tx)
+
+	user, err := service.UserRepo.FindById(ctx, tx, userId)
+	if err != nil {
+		panic(err)
+	}
+
+	service.UserRepo.Delete(ctx, tx, user)
 }
 
 func (service *UserServiceImpl) FindById(ctx context.Context, userId int) web.UserResponse {
-	panic("not implemented") // TODO: Implement
+	tx, err := service.DB.Begin()
+	helper.PanicIfError(err)
+	defer helper.CommitOrRollback(tx)
+
+	user, err := service.UserRepo.FindById(ctx, tx, userId)
+	if err != nil {
+		panic(err)
+	}
+
+	return helper.ToUserResponse(user)
 }
 
 func (service *UserServiceImpl) FindAll(ctx context.Context) []web.UserResponse {
-	panic("not implemented") // TODO: Implement
+	tx, err := service.DB.Begin()
+	helper.PanicIfError(err)
+	defer helper.CommitOrRollback(tx)
+
+	users := service.UserRepo.FindAll(ctx, tx)
+	if err != nil {
+		panic(err)
+	}
+
+	return helper.ToUserResponses(users)
 }
