@@ -49,13 +49,43 @@ func (controller *UserControllerImpl) Update(writer http.ResponseWriter, request
 }
 
 func (controller *UserControllerImpl) Delete(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	panic("not implemented") // TODO: Implement
+	userId := params.ByName("id")
+	id, err := strconv.Atoi(userId)
+	helper.PanicIfError(err)
+
+	controller.UserService.Delete(request.Context(), id)
+	webResponse := web.WebResponse{
+		Code:   200,
+		Status: "Ok",
+		Data:   nil,
+	}
+
+	helper.WriteToResponseBody(writer, webResponse)
 }
 
 func (controller *UserControllerImpl) FindById(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	panic("not implemented") // TODO: Implement
+	userId := params.ByName("id")
+	id, err := strconv.Atoi(userId)
+	helper.PanicIfError(err)
+
+	user := controller.UserService.FindById(request.Context(), id)
+	webResponse := web.WebResponse{
+		Code:   200,
+		Status: "Ok",
+		Data:   user,
+	}
+
+	helper.WriteToResponseBody(writer, webResponse)
 }
 
 func (controller *UserControllerImpl) FindAll(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	panic("not implemented") // TODO: Implement
+
+	users := controller.UserService.FindAll(request.Context())
+	webResponse := web.WebResponse{
+		Code:   200,
+		Status: "Ok",
+		Data:   users,
+	}
+
+	helper.WriteToResponseBody(writer, webResponse)
 }
