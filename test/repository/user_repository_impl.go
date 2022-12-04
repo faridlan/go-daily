@@ -12,6 +12,10 @@ import (
 type UserRepositoryImpl struct {
 }
 
+func NewUserRepository() UserRepository {
+	return &UserRepositoryImpl{}
+}
+
 func (repository *UserRepositoryImpl) Create(ctx context.Context, tx *sql.Tx, user domain.User) domain.User {
 	SQL := "INSERT INTO user(name, email, password) VALUES (?,?,?)"
 	result, err := tx.ExecContext(ctx, SQL, user.Name, user.Email, user.Password)
@@ -44,11 +48,12 @@ func (repository *UserRepositoryImpl) FindById(ctx context.Context, tx *sql.Tx, 
 	SQL := "SELECT id, name, email, password FROM user WHERE id = ?"
 	row, err := tx.QueryContext(ctx, SQL, userId)
 	helper.PanicIfError(err)
+	defer row.Close()
 
 	user := domain.User{}
 
 	if row.Next() {
-		err := row.Scan(&user.Id, &user.Id, &user.Email, &user.Password)
+		err := row.Scan(&user.Id, &user.Name, &user.Email, &user.Password)
 		helper.PanicIfError(err)
 
 		return user, nil
@@ -63,12 +68,13 @@ func (repository *UserRepositoryImpl) FindAll(ctx context.Context, tx *sql.Tx) [
 	SQL := "SELECT id, name, email, password FROM user"
 	row, err := tx.QueryContext(ctx, SQL)
 	helper.PanicIfError(err)
+	defer row.Close()
 
 	users := []domain.User{}
 
-	if row.Next() {
+	for row.Next() {
 		user := domain.User{}
-		err := row.Scan(&user.Id, &user.Id, &user.Email, &user.Password)
+		err := row.Scan(&user.Id, &user.Name, &user.Email, &user.Password)
 		helper.PanicIfError(err)
 
 		users = append(users, user)

@@ -11,8 +11,15 @@ import (
 )
 
 type UserServiceImpl struct {
-	DB       sql.DB
+	DB       *sql.DB
 	UserRepo repository.UserRepository
+}
+
+func NewUserRepositoryImpl(db *sql.DB, userRepo repository.UserRepository) UserService {
+	return &UserServiceImpl{
+		DB:       db,
+		UserRepo: userRepo,
+	}
 }
 
 func (service *UserServiceImpl) Create(ctx context.Context, request web.UserCreate) web.UserResponse {
